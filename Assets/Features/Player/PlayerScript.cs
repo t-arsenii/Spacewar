@@ -12,6 +12,10 @@ public class SpaceshipScript : MonoBehaviour
     [SerializeField] float maxSpeed = 5f;
     private Rigidbody2D rigidBody;
 
+    private const float rifleCooldown = 0.75f;
+    private float rifleCurrentCooldown = 0f;
+    private bool rifleOnCooldown = false;
+
     [SerializeField] Transform shootingTransformPoint;
     [SerializeField] GameObject bulletGameObject;
     private void Awake()
@@ -25,10 +29,13 @@ public class SpaceshipScript : MonoBehaviour
     {
     }
 
+    private void Update()
+    {
+        RifleShooting();
+    }
     private void FixedUpdate()
     {
         Movement();
-        Shooting();
     }
 
     private void Movement()
@@ -59,10 +66,28 @@ public class SpaceshipScript : MonoBehaviour
             return;
         }
     }
-    private void Shooting()
+    private void RifleShooting()
     {
-        if (!Input.GetKeyDown(KeyCode.Space)) return;
+        if (!rifleOnCooldown)
+        {
+            if (!Input.GetKey(KeyCode.Space)) return;
 
-        Instantiate<GameObject>(bulletGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
+            var bullet = Instantiate<GameObject>(bulletGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
+            bullet.GetComponent<BulletScript>().SetInitialVelocity(rigidBody.linearVelocity);
+            
+            rifleOnCooldown = true;
+            return;
+        }
+
+        if (rifleCurrentCooldown >= rifleCooldown)
+        {
+            rifleOnCooldown = false;
+            rifleCurrentCooldown = 0;
+            return;
+        }
+
+        rifleCurrentCooldown += Time.deltaTime;
     }
+
+
 }

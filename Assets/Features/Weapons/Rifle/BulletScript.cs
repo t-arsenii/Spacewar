@@ -9,14 +9,14 @@ public class BulletScript : MonoBehaviour
     {
         this.rigidbody2D = GetComponent<Rigidbody2D>();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void SetInitialVelocity(Vector2 velocity)
     {
-        rigidbody2D.linearVelocity = (Vector2)(transform.up * travelVelocity);
+        rigidbody2D.linearVelocity = (Vector2)(transform.up * travelVelocity) + velocity;
+
     }
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Trigger Bullet");
+        Destroy(gameObject);
     }
     // Update is called once per frame
     void FixedUpdate()
