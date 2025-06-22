@@ -1,27 +1,34 @@
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SpaceshipScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private int playerHp = 100; 
+    private int playerHp = 100;
     [SerializeField] float pushForce = 1f;
     [SerializeField] float rotateSpeed = 1f;
     [SerializeField] float maxSpeed = 5f;
     private Rigidbody2D rigidBody;
-    private void Start()
+
+    [SerializeField] Transform shootingTransformPoint;
+    [SerializeField] GameObject bulletGameObject;
+    private void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody2D>();
         rigidBody.linearDamping = 0.25f;
         rigidBody.angularDamping = 0.25f;
-        // Debug.Log("Spaceship is flying through space!");        
+
+    }
+    private void Start()
+    {
     }
 
-    // Update is called once per frame
     private void FixedUpdate()
     {
         Movement();
+        Shooting();
     }
 
     private void Movement()
@@ -36,14 +43,12 @@ public class SpaceshipScript : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A))
         {
-            Debug.Log("Spaceship turning left!");
             transform.Rotate(0f, 0f, 1f * rotateSpeed);
             return;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            Debug.Log("Spaceship turning right!");
             transform.Rotate(0f, 0f, -1f * rotateSpeed);
             return;
         }
@@ -53,5 +58,11 @@ public class SpaceshipScript : MonoBehaviour
             rigidBody.AddForce(transform.up * pushForce);
             return;
         }
+    }
+    private void Shooting()
+    {
+        if (!Input.GetKeyDown(KeyCode.Space)) return;
+
+        Instantiate<GameObject>(bulletGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
     }
 }
