@@ -6,12 +6,11 @@ using UnityEngine.InputSystem;
 public class SpaceshipScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private int playerHp = 100;
     [SerializeField] float pushForce = 1f;
     [SerializeField] float rotateSpeed = 1f;
     [SerializeField] float maxSpeed = 5f;
     private Rigidbody2D rigidBody;
-
+    private IHealthController healthController;
     private const float rifleCooldown = 0.75f;
     private float rifleCurrentCooldown = 0f;
     private bool rifleOnCooldown = false;
@@ -21,6 +20,8 @@ public class SpaceshipScript : MonoBehaviour
     private void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody2D>();
+        healthController = GetComponent<HealthBehaviour>();
+
         rigidBody.linearDamping = 0.25f;
         rigidBody.angularDamping = 0.25f;
 
@@ -32,6 +33,7 @@ public class SpaceshipScript : MonoBehaviour
     private void Update()
     {
         RifleShooting();
+        TestHealth();
     }
     private void FixedUpdate()
     {
@@ -74,7 +76,7 @@ public class SpaceshipScript : MonoBehaviour
 
             var bullet = Instantiate<GameObject>(bulletGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
             bullet.GetComponent<BulletScript>().SetInitialVelocity(rigidBody.linearVelocity);
-            
+
             rifleOnCooldown = true;
             return;
         }
@@ -88,6 +90,13 @@ public class SpaceshipScript : MonoBehaviour
 
         rifleCurrentCooldown += Time.deltaTime;
     }
-
+    private void TestHealth()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            healthController.ApplyDamage(5);
+            Debug.Log(healthController.CurrentHealth);
+        }
+    }
 
 }
