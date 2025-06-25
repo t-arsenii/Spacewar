@@ -20,7 +20,7 @@ public class SpaceshipScript : MonoBehaviour
     private void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody2D>();
-        healthController = GetComponent<HealthBehaviour>();
+        healthController = GetComponent<HealthController>();
 
         rigidBody.linearDamping = 0.25f;
         rigidBody.angularDamping = 0.25f;
@@ -90,7 +90,7 @@ public class SpaceshipScript : MonoBehaviour
 
         rifleCurrentCooldown += Time.deltaTime;
     }
-    private void TestHealth()
+    private void TestHealth()   
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {

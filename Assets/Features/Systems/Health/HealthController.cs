@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HealthBehaviour : MonoBehaviour, IHealthController
+public class HealthController : MonoBehaviour, IHealthController
 {
     private HealthModel Health;
     [SerializeField] float maxHealth;
