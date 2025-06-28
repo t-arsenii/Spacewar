@@ -75,7 +75,7 @@ public class SpaceshipScript : MonoBehaviour
             if (!Input.GetKey(KeyCode.Space)) return;
 
             var bullet = Instantiate<GameObject>(bulletGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
-            bullet.GetComponent<BulletScript>().SetInitialVelocity(rigidBody.linearVelocity);
+            bullet.GetComponent<BulletController>().SetInitialVelocity(rigidBody.linearVelocity);
 
             rifleOnCooldown = true;
             return;
@@ -94,8 +94,7 @@ public class SpaceshipScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            healthController.ApplyDamage(5);
-            Debug.Log(healthController.CurrentHealth);
+            healthController.RemoveHealth(5);
         }
     }
 

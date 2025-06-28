@@ -1,11 +1,35 @@
+using System;
 using UnityEngine;
 
-public class DamageableController : MonoBehaviour
+public class DamageableController : MonoBehaviour, IDammagableController
 {
-    [SerializeField] IHealthController HealthController;
-    [SerializeField] Collider2D DamageCollider2D;
-    void OnCollisionEnter2D(Collision2D collision)
+    private IHealthController HealthController;
+    [SerializeField] HealthController healthController;
+    private event Action OnDamageTaken;
+    void Awake()
     {
-        collision.gameObject.GetComponent<BulletScript>();
+        HealthController = GetComponent<HealthController>();
     }
+    void Start()
+    {
+        HealthController.AddOnDeathEventHandler(() =>
+        {
+            Destroy(gameObject);
+        });
+    }
+    public void ApplyDamage(float damage)
+    {
+        HealthController.RemoveHealth(damage);
+        OnDamageTaken?.Invoke();
+    }
+
+    public void AddOnDamageAppliedEventHandler()
+    {
+        throw new NotImplementedException();
+    }
+}
+interface IDammagableController
+{
+    void ApplyDamage(float damage);
+    void AddOnDamageAppliedEventHandler();
 }

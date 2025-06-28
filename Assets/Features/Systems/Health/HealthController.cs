@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class HealthController : MonoBehaviour, IHealthController
@@ -5,9 +6,9 @@ public class HealthController : MonoBehaviour, IHealthController
     private HealthModel Health;
     [SerializeField] float maxHealth;
 
-     public float CurrentHealth => Health.CurrentHealth;
+    public float CurrentHealth => Health.CurrentHealth;
 
-     public void ApplyDamage(float damage)
+    public void RemoveHealth(float damage)
     {
         Health.RemoveHp(damage);
     }
@@ -17,14 +18,26 @@ public class HealthController : MonoBehaviour, IHealthController
         return Health.CurrentHealth;
     }
 
-    void Start()
+    void Awake()
     {
         Health = new();
         Health.SetMaxHealth(maxHealth);
     }
+
+    public void AddOnHealthChangeEventHandler(Action<float> OnHelahtChangeEventHandler)
+    {
+        Health.AddOnHealthChangeEventHandler(OnHelahtChangeEventHandler);
+    }
+
+    public void AddOnDeathEventHandler(Action OnDeathentHandler)
+    {
+        Health.AddOnDeathEventHandler(OnDeathentHandler);
+    }
 }
 public interface IHealthController
 {
-    void ApplyDamage(float damage);
+    void RemoveHealth(float damage);
     float CurrentHealth { get; }
+    public void AddOnHealthChangeEventHandler(Action<float> OnHelahtChangeEventHandler);
+    public void AddOnDeathEventHandler(Action OnDeathentHandler);
 }
