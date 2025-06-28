@@ -1,25 +1,42 @@
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class BulletScript : MonoBehaviour
+public class BulletController : MonoBehaviour, IBulletController
 {
     [SerializeField] private float travelVelocity = 2f;
-    private Rigidbody2D rigidbody2D;
+    [SerializeField] private float damage = 5f;
+    [SerializeField] private float pushForce = 100f;
+    private Rigidbody2D Rigidbody2D;
     void Awake()
     {
-        this.rigidbody2D = GetComponent<Rigidbody2D>();
+        Rigidbody2D = GetComponent<Rigidbody2D>();
     }
     public void SetInitialVelocity(Vector2 velocity)
     {
-        rigidbody2D.linearVelocity = (Vector2)(transform.up * travelVelocity) + velocity;
+        Rigidbody2D.linearVelocity = (Vector2)(transform.up * travelVelocity) + velocity;
 
     }
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
+        IDammagableController dammagable = collision.gameObject.GetComponent<IDammagableController>();
+        IBulletController bulletController = collision.gameObject.GetComponent<IBulletController>();
+        if (dammagable is not null)
+        {
+            dammagable.ApplyDamage(damage);
+            if (collision.attachedRigidbody != null)
+            {
+                collision.attachedRigidbody.AddForce(Rigidbody2D.linearVelocity.normalized * pushForce);
+            }
+        }
+        if (bulletController is null)
+        {
+            Destroy(gameObject);
+        }
     }
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-    }
+}
+
+interface IBulletController
+{
+
 }
