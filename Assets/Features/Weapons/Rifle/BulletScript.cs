@@ -29,7 +29,7 @@ public class BulletController : MonoBehaviour, IBulletController
                 collision.attachedRigidbody.AddForce(Rigidbody2D.linearVelocity.normalized * pushForce);
             }
         }
-        if (bulletController is null)
+        if (collision.gameObject.layer != LayerMask.NameToLayer("IgnoreProjectile"))
         {
             Destroy(gameObject);
         }

@@ -5,6 +5,7 @@ public class RifleController : MonoBehaviour, PickableItem
     WeaponType weaponType = WeaponType.Rifle;
     void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("Trigger entered");
         IEquipmentController equipementController = collision.GetComponent<IEquipmentController>();
         if (equipementController is not null)
         {

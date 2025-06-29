@@ -11,17 +11,21 @@ public class SpaceshipScript : MonoBehaviour
     [SerializeField] float maxSpeed = 5f;
     private Rigidbody2D rigidBody;
     private IHealthController healthController;
+    private IEquipmentController equipmentController;
     private const float rifleCooldown = 0.75f;
     private float rifleCurrentCooldown = 0f;
     private bool rifleOnCooldown = false;
-
+    private bool rocketLauncherOnCooldown = false;
+    private const float rocketLauncherCooldown = 0.75f;
+    private float rocketLauncherCurrentCooldown = 0f;
     [SerializeField] Transform shootingTransformPoint;
     [SerializeField] GameObject bulletGameObject;
+    [SerializeField] GameObject rocketGameObject;
     private void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody2D>();
         healthController = GetComponent<HealthController>();
-
+        equipmentController = GetComponent<IEquipmentController>();
         rigidBody.linearDamping = 0.25f;
         rigidBody.angularDamping = 0.25f;
 
@@ -32,8 +36,9 @@ public class SpaceshipScript : MonoBehaviour
 
     private void Update()
     {
-        RifleShooting();
+        Shooting();
         TestHealth();
+        EquipementSelect();
     }
     private void FixedUpdate()
     {
@@ -68,6 +73,34 @@ public class SpaceshipScript : MonoBehaviour
             return;
         }
     }
+    private void EquipementSelect()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            equipmentController.SelectWeapon(SelectedWeapon.DefaultWeapon);
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            equipmentController.SelectWeapon(SelectedWeapon.AdditionalWeapon);
+            return;
+        }
+    }
+    private void Shooting()
+    {
+        if (equipmentController.SelectedWeapon == SelectedWeapon.DefaultWeapon)
+        {
+            RifleShooting();
+            return;
+        }
+
+        if (equipmentController.AdditionalWeapon == WeaponType.RocketLauncher)
+        {
+            RocketLauncherShooting();
+            return;
+        }
+    }
     private void RifleShooting()
     {
         if (!rifleOnCooldown)
@@ -90,7 +123,29 @@ public class SpaceshipScript : MonoBehaviour
 
         rifleCurrentCooldown += Time.deltaTime;
     }
-    private void TestHealth()   
+    private void RocketLauncherShooting()
+    {
+        if (!rocketLauncherOnCooldown)
+        {
+            if (!Input.GetKey(KeyCode.Space)) return;
+
+            var rocket = Instantiate<GameObject>(rocketGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
+            rocket.GetComponent<RocketController>().SetInitialVelocity(rigidBody.linearVelocity);
+
+            rocketLauncherOnCooldown = true;
+            return;
+        }
+
+        if (rocketLauncherCurrentCooldown >= rocketLauncherCooldown)
+        {
+            rocketLauncherOnCooldown = false;
+            rocketLauncherCurrentCooldown = 0;
+            return;
+        }
+
+        rocketLauncherCurrentCooldown += Time.deltaTime;
+    }
+    private void TestHealth()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
