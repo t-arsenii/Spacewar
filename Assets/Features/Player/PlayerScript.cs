@@ -12,15 +12,12 @@ public class SpaceshipScript : MonoBehaviour
     private Rigidbody2D rigidBody;
     private IHealthController healthController;
     private IEquipmentController equipmentController;
-    private const float rifleCooldown = 0.75f;
-    private float rifleCurrentCooldown = 0f;
-    private bool rifleOnCooldown = false;
-    private bool rocketLauncherOnCooldown = false;
-    private const float rocketLauncherCooldown = 0.75f;
-    private float rocketLauncherCurrentCooldown = 0f;
+    private float weaponCooldown = 0.75f;
+    private float weaponCurrentCooldown = 0f;
     [SerializeField] Transform shootingTransformPoint;
     [SerializeField] GameObject bulletGameObject;
     [SerializeField] GameObject rocketGameObject;
+    [SerializeField] GameObject laserBeamGameObject;
     private void Awake()
     {
         rigidBody = this.GetComponent<Rigidbody2D>();
@@ -37,14 +34,12 @@ public class SpaceshipScript : MonoBehaviour
     private void Update()
     {
         Shooting();
-        TestHealth();
         EquipementSelect();
     }
     private void FixedUpdate()
     {
         Movement();
     }
-
     private void Movement()
     {
         PlayerMovenemt();
@@ -75,15 +70,32 @@ public class SpaceshipScript : MonoBehaviour
     }
     private void EquipementSelect()
     {
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             equipmentController.SelectWeapon(SelectedWeapon.DefaultWeapon);
+            weaponCooldown = 0.75f;
+            weaponCurrentCooldown = 0;
             return;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             equipmentController.SelectWeapon(SelectedWeapon.AdditionalWeapon);
+            if (equipmentController.AdditionalWeapon == WeaponType.RocketLauncher)
+            {
+                weaponCooldown = 0.75f;
+                weaponCurrentCooldown = 0;
+                return;
+            }
+
+            if (equipmentController.AdditionalWeapon == WeaponType.Railgun)
+            {
+                weaponCooldown = 0.75f;
+                weaponCurrentCooldown = 0;
+                return;
+            }
+
             return;
         }
     }
@@ -91,66 +103,39 @@ public class SpaceshipScript : MonoBehaviour
     {
         if (equipmentController.SelectedWeapon == SelectedWeapon.DefaultWeapon)
         {
-            RifleShooting();
+            WeaponShooting(bulletGameObject);
             return;
         }
 
         if (equipmentController.AdditionalWeapon == WeaponType.RocketLauncher)
         {
-            RocketLauncherShooting();
+            WeaponShooting(rocketGameObject);
             return;
         }
+
+        if (equipmentController.AdditionalWeapon == WeaponType.Railgun)
+        {
+            WeaponShooting(laserBeamGameObject);
+        }
     }
-    private void RifleShooting()
+    private void WeaponShooting(GameObject projectileGameObject)
     {
-        if (!rifleOnCooldown)
+        if (weaponCurrentCooldown >= weaponCooldown)
         {
             if (!Input.GetKey(KeyCode.Space)) return;
 
-            var bullet = Instantiate<GameObject>(bulletGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
-            bullet.GetComponent<BulletController>().SetInitialVelocity(rigidBody.linearVelocity);
+            var bullet = Instantiate<GameObject>(projectileGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
+            bullet.GetComponent<BulletProjectileController>().SetInitialVelocity(rigidBody.linearVelocity);
 
-            rifleOnCooldown = true;
             return;
         }
 
-        if (rifleCurrentCooldown >= rifleCooldown)
+        if (weaponCurrentCooldown >= weaponCooldown)
         {
-            rifleOnCooldown = false;
-            rifleCurrentCooldown = 0;
+            weaponCurrentCooldown = 0;
             return;
         }
 
-        rifleCurrentCooldown += Time.deltaTime;
+        weaponCurrentCooldown += Time.deltaTime;
     }
-    private void RocketLauncherShooting()
-    {
-        if (!rocketLauncherOnCooldown)
-        {
-            if (!Input.GetKey(KeyCode.Space)) return;
-
-            var rocket = Instantiate<GameObject>(rocketGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
-            rocket.GetComponent<RocketController>().SetInitialVelocity(rigidBody.linearVelocity);
-
-            rocketLauncherOnCooldown = true;
-            return;
-        }
-
-        if (rocketLauncherCurrentCooldown >= rocketLauncherCooldown)
-        {
-            rocketLauncherOnCooldown = false;
-            rocketLauncherCurrentCooldown = 0;
-            return;
-        }
-
-        rocketLauncherCurrentCooldown += Time.deltaTime;
-    }
-    private void TestHealth()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            healthController.RemoveHealth(5);
-        }
-    }
-
 }

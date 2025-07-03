@@ -2,7 +2,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BulletController : MonoBehaviour, IBulletController
+public class BulletProjectileController : MonoBehaviour, IProjectileController
 {
     [SerializeField] private float travelVelocity = 2f;
     [SerializeField] private float damage = 5f;
@@ -20,7 +20,6 @@ public class BulletController : MonoBehaviour, IBulletController
     void OnTriggerEnter2D(Collider2D collision)
     {
         IDammagableController dammagable = collision.gameObject.GetComponent<IDammagableController>();
-        IBulletController bulletController = collision.gameObject.GetComponent<IBulletController>();
         if (dammagable is not null)
         {
             dammagable.ApplyDamage(damage);
@@ -34,9 +33,4 @@ public class BulletController : MonoBehaviour, IBulletController
             Destroy(gameObject);
         }
     }
-}
-
-interface IBulletController
-{
-
 }

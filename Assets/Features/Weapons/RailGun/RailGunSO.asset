@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6349b01c5a8c95c4fadd659c551171fe, type: 3}
-  m_Name: RifleSO
+  m_Name: RailGunSO
   m_EditorClassIdentifier: 
-  weaponType: 0
+  weaponType: 1
   icon: {fileID: 0}

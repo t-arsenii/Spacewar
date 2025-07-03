@@ -1,0 +1,34 @@
+using UnityEngine;
+
+public class RailGunProjectileController : MonoBehaviour, IProjectileController
+{
+     private Rigidbody2D Rigidbody2D;
+     [SerializeField] private float travelVelocity = 2f;
+     [SerializeField] private float damage = 5f;
+     [SerializeField] private float pushForce = 100f;
+     void Awake()
+     {
+          Rigidbody2D = GetComponent<Rigidbody2D>();
+     }
+     public void SetInitialVelocity(Vector2 velocity)
+     {
+          Rigidbody2D.linearVelocity = (Vector2)(transform.up * travelVelocity) + velocity;
+
+     }
+     void OnTriggerEnter2D(Collider2D collision)
+     {
+          IDammagableController dammagable = collision.gameObject.GetComponent<IDammagableController>();
+          if (dammagable is not null)
+          {
+               dammagable.ApplyDamage(damage);
+               if (collision.attachedRigidbody != null)
+               {
+                    collision.attachedRigidbody.AddForce(Rigidbody2D.linearVelocity.normalized * pushForce);
+               }
+          }
+          if (collision.gameObject.layer != LayerMask.NameToLayer("IgnoreProjectile"))
+          {
+               Destroy(gameObject);
+          }
+     }
+}

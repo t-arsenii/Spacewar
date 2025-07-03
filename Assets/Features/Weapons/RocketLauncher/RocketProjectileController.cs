@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RocketController : MonoBehaviour
+public class RocketProjectileController : MonoBehaviour, IProjectileController
 {
     [SerializeField] private float travelVelocity = 2f;
     [SerializeField] private float damage = 5f;
@@ -19,7 +19,6 @@ public class RocketController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         IDammagableController dammagable = collision.gameObject.GetComponent<IDammagableController>();
-        IBulletController bulletController = collision.gameObject.GetComponent<IBulletController>();
         if (dammagable is not null)
         {
             Explode();
