@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RocketProjectileController : MonoBehaviour, IProjectileController
 {
-    [SerializeField] private float travelVelocity = 2f;
+    [SerializeField] private float travelVelocity = 4f;
     [SerializeField] private float damage = 5f;
     [SerializeField] private float pushForce = 100f;
     [SerializeField] private float explosionRadius = 20f;

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3004542317826489778, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
       propertyPath: m_Name
-      value: Item(Rifle) Variant
+      value: Item(Rifle)
       objectReference: {fileID: 0}
     - target: {fileID: 4096481882889866724, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -50,6 +50,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4096481882889866724, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369931615791390786, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
+      propertyPath: m_Color.b
+      value: 0.28147006
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369931615791390786, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369931615791390786, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
+      propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5509785323370033433, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
