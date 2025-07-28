@@ -4,24 +4,25 @@ public class PlayerInputController : MonoBehaviour
 {
      private Rigidbody2D rigidBody;
      private IEquipmentController equipmentController;
+     private IWeaponUserController weaponUserController;
      [SerializeField] private float maxSpeed = 5f;
-
      [SerializeField] private float rotateSpeed = 1f;
      [SerializeField] private float pushForce = 1f;
 
      void Awake()
      {
           rigidBody = this.GetComponent<Rigidbody2D>();
-          equipmentController = this.GetComponent<IEquipmentController>();
      }
 
      void Start()
      {
-
+          equipmentController = this.GetComponent<IEquipmentController>();
+          weaponUserController = this.GetComponent<IWeaponUserController>();
      }
      void Update()
      {
           EquipementSelect();
+          Shoot();
      }
      void FixedUpdate()
      {
@@ -71,6 +72,13 @@ public class PlayerInputController : MonoBehaviour
           {
                equipmentController.SelectWeapon(SelectedWeapon.AdditionalWeapon);
                return;
+          }
+     }
+     private void Shoot()
+     {
+          if (Input.GetKeyDown(KeyCode.Space))
+          {
+               weaponUserController.Shoot();
           }
      }
 }

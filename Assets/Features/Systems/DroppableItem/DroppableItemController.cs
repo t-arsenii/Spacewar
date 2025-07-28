@@ -6,7 +6,7 @@ using UnityEngine;
 public class DroppableItemController : MonoBehaviour
 {
     private IHealthController healthController;
-    [SerializeField] List<GameObject> droppableObjects;
+    [SerializeField] List<GameObject> droppableObjectPrefabs;
     void Start()
     {
         healthController = GetComponent<IHealthController>();
@@ -19,7 +19,7 @@ public class DroppableItemController : MonoBehaviour
     }
     void DropLoot()
     {
-        var dropItem = droppableObjects.ElementAt(Random.Range(0, droppableObjects.Count()));
+        var dropItem = droppableObjectPrefabs.ElementAt(Random.Range(0, droppableObjectPrefabs.Count()));
         var bullet = Instantiate<GameObject>(dropItem, transform.position, transform.rotation);
     }
 }

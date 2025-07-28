@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6349b01c5a8c95c4fadd659c551171fe, type: 3}
-  m_Name: RailGunSO
+  m_Script: {fileID: 11500000, guid: 104e15bdcc9d9394f950724d1431143d, type: 3}
+  m_Name: RocketLauncherData
   m_EditorClassIdentifier: 
-  weaponType: 1
-  icon: {fileID: 0}
+  weaponType: 0
+  maxAmmo: 0
+  damage: 0
+  fireRate: 0

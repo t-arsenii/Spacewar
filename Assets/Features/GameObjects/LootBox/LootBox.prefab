@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3382457048051931830}
   - component: {fileID: 2944013547085652362}
   - component: {fileID: 4509610967380907334}
+  - component: {fileID: -8342654593167765499}
   m_Layer: 0
   m_Name: LootBox
   m_TagString: Untagged
@@ -152,6 +153,20 @@ MonoBehaviour:
   droppableObjects:
   - {fileID: 3985484602817886261, guid: 3437d7872827f544699850019a861d96, type: 3}
   - {fileID: 1597805747096686286, guid: 71dbb23f582269942b85c3c06abf98bc, type: 3}
+--- !u!114 &-8342654593167765499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5250298131102281504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11271db037a6cf34ca053d24279de7f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedOfImpact: 3
+  impactDamage: 5
 --- !u!1 &6358548539299907209
 GameObject:
   m_ObjectHideFlags: 0
