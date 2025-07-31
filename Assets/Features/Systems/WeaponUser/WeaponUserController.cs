@@ -8,10 +8,6 @@ public class WeaponUserController : MonoBehaviour, IWeaponUserController
      private float weaponCooldown = 0.5f;
      private float weaponCurrentCooldown = 0;
      [SerializeField] Transform shootingTransformPoint;
-     [SerializeField] GameObject bulletGameObject;
-     [SerializeField] GameObject rocketGameObject;
-     [SerializeField] GameObject laserBeamGameObject;
-
      private void Start()
      {
           equipmentController = this.GetComponent<IEquipmentController>();
@@ -31,18 +27,18 @@ public class WeaponUserController : MonoBehaviour, IWeaponUserController
      {
           if (!CanShoot()) return;
 
-          if (equipmentController.SelectedWeapon == SelectedWeapon.DefaultWeapon)
-          {
-               ShootProjectile(bulletGameObject);
-          }
-          else if (equipmentController.AdditionalWeapon == WeaponType.RocketLauncher)
-          {
-               ShootProjectile(rocketGameObject);
-          }
-          else if (equipmentController.AdditionalWeapon == WeaponType.Railgun)
-          {
-               ShootProjectile(laserBeamGameObject);
-          }
+          // if (equipmentController.SelectedWeapon == SelectedWeapon.DefaultWeapon)
+          // {
+          //      ShootProjectile(bulletGameObject);
+          // }
+          // else if (equipmentController.AdditionalWeapon == WeaponType.RocketLauncher)
+          // {
+          //      ShootProjectile(rocketGameObject);
+          // }
+          // else if (equipmentController.AdditionalWeapon == WeaponType.Railgun)
+          // {
+          //      ShootProjectile(laserBeamGameObject);
+          // }
           ResetWeaponCooldown();
      }
      private void ShootProjectile(GameObject projectileGameObject)
