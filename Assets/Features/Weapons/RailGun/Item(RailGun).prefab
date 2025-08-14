@@ -85,6 +85,10 @@ PrefabInstance:
       value: 0.11137152
       objectReference: {fileID: 0}
     - target: {fileID: 8526522158623313345, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
+      propertyPath: weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: 03fc93e3f2c75c84b871cb6621683874, type: 2}
+    - target: {fileID: 8526522158623313345, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
       propertyPath: weaponPickable
       value: 
       objectReference: {fileID: 11400000, guid: 049b11a8ec07e6c49aa53bb0365e0d5e, type: 2}

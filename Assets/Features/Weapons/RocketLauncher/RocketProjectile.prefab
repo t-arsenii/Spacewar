@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebbe391116d5cfd4980d8e608d6ec2b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  travelVelocity: 2
+  travelVelocity: 5
   damage: 5
   pushForce: 20
   explosionRadius: 1

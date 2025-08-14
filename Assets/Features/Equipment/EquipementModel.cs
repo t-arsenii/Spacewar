@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum WeaponType
@@ -17,19 +19,21 @@ public enum SelectedWeapon
 }
 public class EquipementModel
 {
-     // private readonly WeaponType DefaultWeapon = WeaponType.Rifle;
-     // public WeaponType? AdditionalWeapon { get; private set; } = null;
-     // public SelectedWeapon SelectedWeapon { get; private set; } = SelectedWeapon.DefaultWeapon;
-     private List<WeaponModel> EquipementSlots = new();
+     private event Action<WeaponModel> OnWeaponChange;
+     public List<WeaponModel> EquipementSlots { get; private set; } = new();
      private int maxEquipementSlots = 1;
-     private WeaponModel? selectedWeapon = null;
-     private WeaponModel? defaultWeapon = null;
+     public WeaponModel? SelectedWeapon { get; private set; } = null;
+     public WeaponModel? DefaultWeapon { get; private set; } = null;
      public EquipementModel SetMaxEquipementSlots(int maxEquipementSlots)
      {
           this.maxEquipementSlots = maxEquipementSlots;
           return this;
      }
-     public void AddWeaponToEquipementSlot(WeaponModel weaponModel)
+     public void AddOnWeaponChangeHandler(Action<WeaponModel> weaponChangeHandler)
+     {
+          OnWeaponChange += weaponChangeHandler;
+     }
+     public void AddWeapon(WeaponModel weaponModel)
      {
           if (EquipementSlots.Count >= maxEquipementSlots)
           {
@@ -37,9 +41,19 @@ public class EquipementModel
           }
           EquipementSlots.Add(weaponModel);
      }
-     public void AddWeaponToEquipementSlot(WeaponModel weaponModel, int equipementSlot)
+     public void AddWeapon(WeaponModel weaponModel, int equipementSlot)
      {
           throw new NotImplementedException();
+     }
+     public void AddOrOverwriteWeapon(WeaponModel weaponModel)
+     {
+          if (EquipementSlots.Count < maxEquipementSlots)
+          {
+               EquipementSlots.Add(weaponModel);
+               return;
+          }
+          EquipementSlots[EquipementSlots.Count - 1] = weaponModel;
+          SelectEquipementSlot(EquipementSlots.Count - 1);
      }
      public EquipementModel SetDefaultWeapon(int defaultWeaponIndex, WeaponModel defaultWeapon)
      {
@@ -49,7 +63,16 @@ public class EquipementModel
                return this;
           }
           EquipementSlots.Insert(defaultWeaponIndex, defaultWeapon);
-          this.defaultWeapon = defaultWeapon;
+          this.DefaultWeapon = defaultWeapon;
           return this;
+     }
+     public void SelectEquipementSlot(int equipementSlotIndex)
+     {
+          if (equipementSlotIndex < 0 || equipementSlotIndex >= EquipementSlots.Count)
+          {
+               return;
+          }
+          SelectedWeapon = EquipementSlots.ElementAt(equipementSlotIndex);
+          OnWeaponChange?.Invoke(SelectedWeapon);
      }
 }

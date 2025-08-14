@@ -73,6 +73,10 @@ PrefabInstance:
       value: Rifle
       objectReference: {fileID: 0}
     - target: {fileID: 8526522158623313345, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
+      propertyPath: weaponData
+      value: 
+      objectReference: {fileID: 11400000, guid: 87aed2f729d81bd4eae25885940fa4cb, type: 2}
+    - target: {fileID: 8526522158623313345, guid: ecb39faffe6df5643a59cf4954d8463c, type: 3}
       propertyPath: weaponPickable
       value: 
       objectReference: {fileID: 11400000, guid: ec1b8e08f1f0d324c9c6183a206158d7, type: 2}

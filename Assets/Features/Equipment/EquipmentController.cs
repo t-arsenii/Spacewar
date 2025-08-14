@@ -7,57 +7,47 @@ public class EquipmentController : MonoBehaviour, IEquipmentController
 {
      private EquipementModel equipement;
      [SerializeField] private WeaponDataSO defaultWeaponSO;
-
-     private event Action<float> OnWeaponChange;
-
      void Awake()
      {
           equipement = new EquipementModel().SetMaxEquipementSlots(2).SetDefaultWeapon(0, new WeaponModel(defaultWeaponSO));
+          equipement.SelectEquipementSlot(0);
      }
 
-     public void PickupWeapon(WeaponModel weapon)
+     public void PickupItem(WeaponModel weapon)
      {
-          equipement.AddWeaponToEquipementSlot(weapon);
+          equipement.AddOrOverwriteWeapon(weapon);
      }
 
-     public void SelectWeapon(SelectedWeapon selectedWeapon)
+     public void SelectEquipement(int equipementSlot)
      {
-          // if (selectedWeapon != SelectedWeapon.AdditionalWeapon)
-          // {
-          //      equipement.SetSelectedWeapon(selectedWeapon);
-          //      return;
-          // }
-
-          // if (AdditionalWeapon is null)
-          // {
-          //      return;
-          // }
-          // equipement.SetSelectedWeapon(selectedWeapon);
-          // //TODO: Pile of shit code, passing weapon cooldowns to a WeaponUserController
-          // switch (AdditionalWeapon)
-          // {
-          //      case WeaponType.Rifle:
-          //           OnWeaponChange.Invoke(0.5f);
-          //           break;
-          //      case WeaponType.Railgun:
-          //           OnWeaponChange.Invoke(0.5f);
-          //           break;
-          //      case WeaponType.RocketLauncher:
-          //           OnWeaponChange.Invoke(0.5f);
-          //           break;
-          // }
+          equipement.SelectEquipementSlot(equipementSlot);
      }
-     public void AddOnWeaponChangeHandler(Action<float> OnWeaponChangeHandler)
+     public void AddOnWeaponChangeHandler(Action<WeaponModel> OnWeaponChangeHandler)
      {
-          OnWeaponChange += OnWeaponChangeHandler;
+          equipement.AddOnWeaponChangeHandler(OnWeaponChangeHandler);
+     }
+
+     public WeaponModel GetEquipementBySlotIndex(int index)
+     {
+          throw new NotImplementedException();
+     }
+
+     public WeaponModel GetSelectedEquipement()
+     {
+          return equipement.SelectedWeapon;
+     }
+     public WeaponModel? GetDefaultEquipement()
+     {
+          return equipement.DefaultWeapon;
      }
 }
 
 interface IEquipmentController
 {
-     public void PickupWeapon(WeaponType item);
-     public void SelectWeapon(SelectedWeapon selectedWeapon);
-     // public SelectedWeapon SelectedWeapon { get; }
-     // public WeaponType? AdditionalWeapon { get; }
-     public void AddOnWeaponChangeHandler(Action<float> OnWeaponChangeHandler);
+     public void PickupItem(WeaponModel item);
+     public void SelectEquipement(int equipementSlotId);
+     public WeaponModel? GetEquipementBySlotIndex(int index);
+     public WeaponModel? GetSelectedEquipement();
+     public WeaponModel? GetDefaultEquipement();
+     public void AddOnWeaponChangeHandler(Action<WeaponModel> OnWeaponChangeHandler);
 }

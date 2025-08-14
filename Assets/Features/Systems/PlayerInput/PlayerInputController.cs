@@ -65,18 +65,18 @@ public class PlayerInputController : MonoBehaviour
 
           if (Input.GetKeyDown(KeyCode.Alpha1))
           {
-               equipmentController.SelectWeapon(SelectedWeapon.DefaultWeapon);
+               equipmentController.SelectEquipement(0);
                return;
           }
           if (Input.GetKeyDown(KeyCode.Alpha2))
           {
-               equipmentController.SelectWeapon(SelectedWeapon.AdditionalWeapon);
+               equipmentController.SelectEquipement(1);
                return;
           }
      }
      private void Shoot()
      {
-          if (Input.GetKeyDown(KeyCode.Space))
+          if (Input.GetKey(KeyCode.Space))
           {
                weaponUserController.Shoot();
           }

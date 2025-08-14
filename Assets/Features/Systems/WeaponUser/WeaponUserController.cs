@@ -1,18 +1,16 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 public class WeaponUserController : MonoBehaviour, IWeaponUserController
 {
      private IEquipmentController equipmentController;
      private Rigidbody2D rigidBody;
-     private float weaponCooldown = 0.5f;
-     private float weaponCurrentCooldown = 0;
      [SerializeField] Transform shootingTransformPoint;
+     private event Action<WeaponModel> OnSelectedWeaponAmmoChange;
      private void Start()
      {
           equipmentController = this.GetComponent<IEquipmentController>();
           rigidBody = this.GetComponent<Rigidbody2D>();
-          equipmentController.AddOnWeaponChangeHandler(SetWeaponCooldown);
      }
      private void Update()
      {
@@ -26,62 +24,49 @@ public class WeaponUserController : MonoBehaviour, IWeaponUserController
      public void Shoot()
      {
           if (!CanShoot()) return;
+          WeaponModel selectedWeapon = equipmentController.GetSelectedEquipement();
+          ShootProjectile(selectedWeapon.WeaponProjectilePrefab);
+          if (selectedWeapon != equipmentController.GetDefaultEquipement())
+          {
+               selectedWeapon.RemoveAmmo();
+               OnSelectedWeaponAmmoChange?.Invoke(selectedWeapon);
+          }
+          selectedWeapon.ResetCurrentCooldown();
 
-          // if (equipmentController.SelectedWeapon == SelectedWeapon.DefaultWeapon)
-          // {
-          //      ShootProjectile(bulletGameObject);
-          // }
-          // else if (equipmentController.AdditionalWeapon == WeaponType.RocketLauncher)
-          // {
-          //      ShootProjectile(rocketGameObject);
-          // }
-          // else if (equipmentController.AdditionalWeapon == WeaponType.Railgun)
-          // {
-          //      ShootProjectile(laserBeamGameObject);
-          // }
-          ResetWeaponCooldown();
      }
      private void ShootProjectile(GameObject projectileGameObject)
      {
-          if (weaponCurrentCooldown >= weaponCooldown)
-          {
-               if (Input.GetKey(KeyCode.Space)) return;
-
-               var bullet = Instantiate<GameObject>(projectileGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
-               bullet.GetComponent<IProjectileController>().SetInitialVelocity(rigidBody.linearVelocity);
-          }
-
-          if (weaponCurrentCooldown >= weaponCooldown)
-          {
-               weaponCurrentCooldown = 0;
-               return;
-          }
-
-          weaponCurrentCooldown += Time.deltaTime;
+          var projectile = Instantiate<GameObject>(projectileGameObject, shootingTransformPoint.position, shootingTransformPoint.rotation);
+          projectile.GetComponent<IProjectileController>().SetInitialVelocity(rigidBody.linearVelocity);
      }
      private void UpdateWeaponCooldown()
      {
-          if (weaponCurrentCooldown < weaponCooldown)
+          WeaponModel? selectedWeapon = equipmentController.GetSelectedEquipement();
+          if (selectedWeapon is null)
           {
-               weaponCurrentCooldown += Time.deltaTime;
+               return;
           }
-     }
-     private void SetWeaponCooldown(float cooldown)
-     {
-          weaponCooldown = cooldown;
+          selectedWeapon.UpdateWeaponCurrentCooldwon(Time.deltaTime);
      }
      private bool CanShoot()
      {
-          return weaponCurrentCooldown > weaponCooldown;
-     }
-     private void ResetWeaponCooldown()
-     {
-          weaponCurrentCooldown = 0;
+          WeaponModel selectedWeapon = equipmentController.GetSelectedEquipement();
+          if (selectedWeapon is null)
+          {
+               return false;
+          }
+          Debug.Log($"{selectedWeapon.weaponData.WeaponType}: {selectedWeapon.CurrentAmmo}");
+          return (selectedWeapon.IsReloaded() && selectedWeapon.CurrentAmmo > 0);
      }
 
+     public void AddOnSelectedWeaponAmmoChangeHandler(Action<WeaponModel> ammoChangeHandler)
+     {
+          OnSelectedWeaponAmmoChange += ammoChangeHandler;
+     }
 }
 
 public interface IWeaponUserController
 {
      public void Shoot();
+     public void AddOnSelectedWeaponAmmoChangeHandler(Action<WeaponModel> ammoChangeHandler);
 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4509610967380907334}
   - component: {fileID: -8342654593167765499}
   m_Layer: 0
-  m_Name: LootBox
+  m_Name: LootBoxPrefabDefault
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,9 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7f608bec5b56548bbd8dff07afda9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  droppableObjects:
-  - {fileID: 3985484602817886261, guid: 3437d7872827f544699850019a861d96, type: 3}
-  - {fileID: 1597805747096686286, guid: 71dbb23f582269942b85c3c06abf98bc, type: 3}
+  droppableObjectPrefabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &-8342654593167765499
 MonoBehaviour:
   m_ObjectHideFlags: 0
