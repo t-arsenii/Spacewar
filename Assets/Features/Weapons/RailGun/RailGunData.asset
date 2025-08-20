@@ -15,9 +15,5 @@ MonoBehaviour:
   weaponType: 1
   maxAmmo: 10
   damage: 20
-<<<<<<< HEAD
-  fireRate: 1
-=======
   fireRate: 0.1
->>>>>>> fa1bd67461bd0db6caaca3b5904583c73aba87c5
   projectilePrefab: {fileID: 136274142466605023, guid: f29abed8fb69e4f4ca73445d4aaa1219, type: 3}
